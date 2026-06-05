@@ -6,15 +6,22 @@
     <title>3D Evastine Box</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
     <style>
+        /* تأكيد الشفافية 100% وإخفاء السكرول عشان تندمج مع الموقع */
+        html, body {
+            background-color: transparent !important;
+            overflow: hidden;
+        }
+
         body {
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; background-color: #f8fafc; margin: 0;
+            min-height: 100vh; margin: 0;
             font-family: 'Poppins', sans-serif;
         }
 
         .scene {
             width: 300px; height: 150px;
-            perspective: 1000px; /* لضبط عمق الـ 3D */
+            perspective: 1000px; 
+            transform: scale(1.1); /* تكبير العلبة شوية عشان تملأ المساحة بوضوح */
         }
 
         .box {
