@@ -1,132 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Evastine Box</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
-    <style>
-        /* تأكيد الشفافية 100% وإخفاء السكرول عشان تندمج مع الموقع */
-        html, body {
-            background-color: transparent !important;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0;
-            font-family: 'Poppins', sans-serif;
-        }
+<title>3D Evastine Box</title>
 
-        .scene {
-            width: 300px; height: 150px;
-            perspective: 1000px; 
-            transform: scale(1.1); /* تكبير العلبة شوية عشان تملأ المساحة بوضوح */
-        }
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
 
-        .box {
-            width: 100%; height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: spin 8s infinite linear;
-            transition: transform 0.5s;
-        }
+<style>
 
-        /* توقف الدوران عند وقوف الماوس */
-        .box:hover { animation-play-state: paused; cursor: pointer; }
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
 
-        @keyframes spin {
-            from { transform: translateZ(-25px) rotateY(0deg) rotateX(-5deg); }
-            to { transform: translateZ(-25px) rotateY(360deg) rotateX(-5deg); }
-        }
+    /* يرث الخلفية من الموقع */
+    background:transparent !important;
 
-        .face {
-            position: absolute; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
-            text-align: center; overflow: hidden;
-            border-radius: 4px;
-        }
+    font-family:'Poppins',sans-serif;
+}
 
-        /* الألوان المستوحاة من العلبة */
-        .purple-text { color: #6b21a8; }
-        .pink-text { color: #ec4899; font-size: 14px; }
-        .brand { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; font-style: italic;}
-        .arabic { font-family: 'Cairo', sans-serif; font-size: 26px; }
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
 
-        /* الأشكال الهندسية اللي في الجنب */
-        .shapes { position: absolute; left: 0; bottom: 0; width: 60px; height: 100%; }
-        .shape-pink { position: absolute; bottom: 0; left: 10px; width: 30px; height: 70%; background: #ec4899; transform: skewX(-20deg); }
-        .shape-purple { position: absolute; bottom: 0; left: 40px; width: 30px; height: 50%; background: #6b21a8; transform: skewX(-20deg); }
+/* ========================================= */
+/* 3D Scene */
+/* ========================================= */
 
-        /* مقاسات أوجه العلبة */
-        .front, .back { width: 300px; height: 150px; }
-        .right, .left { width: 80px; height: 150px; }
-        .top, .bottom { width: 300px; height: 80px; }
+.scene{
+    width:300px;
+    height:150px;
+    perspective:1000px;
+    background:transparent;
+}
 
-        /* تجميع العلبة في مساحة الثري دي */
-        .front  { transform: rotateY(  0deg) translateZ(40px); }
-        .back   { transform: rotateY(180deg) translateZ(40px); }
-        .right  { transform: rotateY( 90deg) translateZ(260px); }
-        .left   { transform: rotateY(-90deg) translateZ(40px); }
-        .top    { transform: rotateX( 90deg) translateZ(40px); }
-        .bottom { transform: rotateX(-90deg) translateZ(110px); }
+.box{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    animation:spin 8s linear infinite;
+}
 
-        /* محتوى الجوانب */
-        .side-text { font-size: 10px; color: #333; transform: rotate(-90deg); white-space: nowrap; }
-        .barcode { width: 60px; height: 20px; background: repeating-linear-gradient(90deg, #000 0, #000 2px, #fff 2px, #fff 4px, #000 4px, #000 5px, #fff 5px, #fff 8px); margin-top: 10px;}
+.box:hover{
+    animation-play-state:paused;
+    cursor:pointer;
+}
 
-        /* ده السحر اللي بيخلي العلبة تفهم هي في دارك مود ولا لا */
-        @media (prefers-color-scheme: dark) {
-            .face {
-                background: #1e293b !important; /* لون غامق يتناسب مع Dark Mode */
-                border-color: #334155 !important;
-                color: #f8fafc !important;
-            }
-            /* هنا تقدر تغير ألوان النصوص عشان تبان في الدارك مود */
-            .purple-text { color: #818cf8 !important; } 
-        }
-    </style>
+@keyframes spin{
+    from{
+        transform:translateZ(-25px) rotateY(0deg) rotateX(-5deg);
+    }
+    to{
+        transform:translateZ(-25px) rotateY(360deg) rotateX(-5deg);
+    }
+}
+
+/* ========================================= */
+/* Faces */
+/* ========================================= */
+
+.face{
+    position:absolute;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:#ffffff;
+
+    border:2px solid #e2e8f0;
+
+    box-shadow:
+        inset 0 0 20px rgba(0,0,0,.05),
+        0 10px 20px rgba(0,0,0,.08);
+
+    text-align:center;
+    overflow:hidden;
+    border-radius:4px;
+}
+
+/* ========================================= */
+/* Colors */
+/* ========================================= */
+
+.purple-text{
+    color:#6b21a8;
+}
+
+.pink-text{
+    color:#ec4899;
+}
+
+.brand{
+    font-size:28px;
+    font-weight:800;
+    margin:0;
+    letter-spacing:2px;
+    font-style:italic;
+}
+
+.arabic{
+    font-family:'Cairo',sans-serif;
+    font-size:26px;
+}
+
+/* ========================================= */
+/* Decorative Shapes */
+/* ========================================= */
+
+.shapes{
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:60px;
+    height:100%;
+}
+
+.shape-pink{
+    position:absolute;
+    bottom:0;
+    left:10px;
+
+    width:30px;
+    height:70%;
+
+    background:#ec4899;
+
+    transform:skewX(-20deg);
+}
+
+.shape-purple{
+    position:absolute;
+    bottom:0;
+    left:40px;
+
+    width:30px;
+    height:50%;
+
+    background:#6b21a8;
+
+    transform:skewX(-20deg);
+}
+
+/* ========================================= */
+/* Dimensions */
+/* ========================================= */
+
+.front,
+.back{
+    width:300px;
+    height:150px;
+}
+
+.right,
+.left{
+    width:80px;
+    height:150px;
+}
+
+.top,
+.bottom{
+    width:300px;
+    height:80px;
+}
+
+/* ========================================= */
+/* 3D Placement */
+/* ========================================= */
+
+.front{
+    transform:rotateY(0deg) translateZ(40px);
+}
+
+.back{
+    transform:rotateY(180deg) translateZ(40px);
+}
+
+.right{
+    transform:rotateY(90deg) translateZ(260px);
+}
+
+.left{
+    transform:rotateY(-90deg) translateZ(40px);
+}
+
+.top{
+    transform:rotateX(90deg) translateZ(40px);
+}
+
+.bottom{
+    transform:rotateX(-90deg) translateZ(110px);
+}
+
+/* ========================================= */
+/* Side Text */
+/* ========================================= */
+
+.side-text{
+    font-size:10px;
+    color:#333;
+    transform:rotate(-90deg);
+    white-space:nowrap;
+}
+
+.barcode{
+    width:60px;
+    height:20px;
+
+    background:
+    repeating-linear-gradient(
+        90deg,
+        #000 0,
+        #000 2px,
+        #fff 2px,
+        #fff 4px,
+        #000 4px,
+        #000 5px,
+        #fff 5px,
+        #fff 8px
+    );
+
+    margin-top:10px;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="scene">
+
     <div class="box">
+
+        <!-- Front -->
+
         <div class="face front">
-            <div class="shapes"><div class="shape-pink"></div><div class="shape-purple"></div></div>
-            <h1 class="brand purple-text">EVASTINE&reg;</h1>
-            <div style="background: #ec4899; color: white; padding: 2px 15px; margin: 5px 0; font-size: 12px; font-weight: bold; transform: skewX(-15deg);">Ebastine 10 mg</div>
-            <p class="purple-text" style="font-weight: 600; margin: 0;">Anti - Allergic</p>
-            <span style="position: absolute; bottom: 5px; right: 10px; font-size: 10px; color: white; background: #6b21a8; padding: 2px 8px;">20 Film Coated Tablets</span>
+
+            <div class="shapes">
+                <div class="shape-pink"></div>
+                <div class="shape-purple"></div>
+            </div>
+
+            <h1 class="brand purple-text">
+                EVASTINE&reg;
+            </h1>
+
+            <div
+                style="
+                background:#ec4899;
+                color:white;
+                padding:2px 15px;
+                margin:5px 0;
+                font-size:12px;
+                font-weight:bold;
+                transform:skewX(-15deg);
+                ">
+                Ebastine 10 mg
+            </div>
+
+            <p
+                class="purple-text"
+                style="
+                font-weight:600;
+                margin:0;
+                ">
+                Anti - Allergic
+            </p>
+
+            <span
+                style="
+                position:absolute;
+                bottom:5px;
+                right:10px;
+                font-size:10px;
+                color:white;
+                background:#6b21a8;
+                padding:2px 8px;
+                ">
+                20 Film Coated Tablets
+            </span>
+
         </div>
+
+        <!-- Back -->
 
         <div class="face back">
-            <div class="shapes"><div class="shape-pink"></div><div class="shape-purple"></div></div>
-            <h1 class="brand purple-text arabic">إيفاستين&reg;</h1>
-            <div style="background: #ec4899; color: white; padding: 2px 15px; margin: 5px 0; font-size: 12px; font-weight: bold; transform: skewX(-15deg); font-family: 'Cairo';">إيباستين ١٠ مجم</div>
-            <p class="purple-text arabic" style="font-size: 16px; margin: 0;">مضاد للحساسية</p>
-            <span style="position: absolute; bottom: 5px; left: 10px; font-size: 10px; color: white; background: #6b21a8; padding: 2px 8px; font-family: 'Cairo';">٢٠ قرص مغلف</span>
+
+            <div class="shapes">
+                <div class="shape-pink"></div>
+                <div class="shape-purple"></div>
+            </div>
+
+            <h1 class="brand purple-text arabic">
+                إيفاستين&reg;
+            </h1>
+
+            <div
+                style="
+                background:#ec4899;
+                color:white;
+                padding:2px 15px;
+                margin:5px 0;
+                font-size:12px;
+                font-weight:bold;
+                transform:skewX(-15deg);
+                font-family:'Cairo';
+                ">
+                إيباستين ١٠ مجم
+            </div>
+
+            <p
+                class="purple-text arabic"
+                style="
+                font-size:16px;
+                margin:0;
+                ">
+                مضاد للحساسية
+            </p>
+
+            <span
+                style="
+                position:absolute;
+                bottom:5px;
+                left:10px;
+                font-size:10px;
+                color:white;
+                background:#6b21a8;
+                padding:2px 8px;
+                font-family:'Cairo';
+                ">
+                ٢٠ قرص مغلف
+            </span>
+
         </div>
+
+        <!-- Right -->
 
         <div class="face right">
-            <div class="side-text">Manufactured by: Marcyrl</div>
+            <div class="side-text">
+                Manufactured by: Marcyrl
+            </div>
         </div>
+
+        <!-- Left -->
 
         <div class="face left">
-            <div class="side-text">EDA Reg. No.: 22439</div>
-            <div class="barcode" style="transform: rotate(-90deg); margin-top: 40px;"></div>
+
+            <div class="side-text">
+                EDA Reg. No.: 22439
+            </div>
+
+            <div
+                class="barcode"
+                style="
+                transform:rotate(-90deg);
+                margin-top:40px;
+                ">
+            </div>
+
         </div>
+
+        <!-- Top -->
 
         <div class="face top">
-            <h3 class="purple-text arabic" style="margin: 0; font-size: 14px;">إيفاستين</h3>
+
+            <h3
+                class="purple-text arabic"
+                style="
+                margin:0;
+                font-size:14px;
+                ">
+                إيفاستين
+            </h3>
+
         </div>
 
+        <!-- Bottom -->
+
         <div class="face bottom">
-            <span class="purple-text" style="font-size: 12px;">EVASTINE 10mg</span>
+
+            <span
+                class="purple-text"
+                style="
+                font-size:12px;
+                ">
+                EVASTINE 10mg
+            </span>
+
         </div>
+
     </div>
+
 </div>
 
 </body>
